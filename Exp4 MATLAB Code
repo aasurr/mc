@@ -1,0 +1,35 @@
+Exp4 MATLAB Code
+clc;
+clear;
+N = 10000; % number of bits
+snr_db = 0:10:60; % SNR range
+ber = [];
+for k = 1:length(snr_db)
+    % Generate bits
+    data = randi([0 1], 1, N);
+    % BPSK Modulation (0->-1, 1->+1)
+    bpsk = 2*data - 1;
+    % Rayleigh channel
+    h = (randn(1,N) + 1i*randn(1,N))/sqrt(2);
+    % Transmitted signal
+    tx = h .* bpsk;
+    % Noise
+    snr = 10^(snr_db(k)/10);
+    noise = (randn(1,N) + 1i*randn(1,N))/sqrt(2*snr);
+    % Received signal
+    rx = tx + noise;
+    % Equalization
+    rx_eq = rx ./ h;
+    % Demodulation
+    rec = real(rx_eq) > 0;
+    % BER calculation
+    errors = sum(data ~= rec);
+    ber(k) = errors/N;
+end
+% Plot
+semilogy(snr_db, ber, 'o-');
+grid on;
+xlabel('SNR (dB)');
+ylabel('BER');
+title('BER vs SNR for BPSK over Rayleigh Channel');
+
