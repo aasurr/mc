@@ -1,0 +1,293 @@
+Exp1 MATLAB Code
+% EXPERIMENT 01 : CDMA FUNCTION CODE
+
+clc;
+clear;
+
+% Fixed input data
+d1 = [1 0 1 1];
+d2 = [0 1 0 1];
+
+% Fixed orthogonal codes
+c1 = [1 1 1 1];
+c2 = [1 -1 1 -1];
+
+disp('User 1 Code:');
+disp(c1);
+
+disp('User 2 Code:');
+disp(c2);
+
+% Convert data (0 -> -1)
+for i = 1:4
+    
+    if d1(i) == 0
+        d1(i) = -1;
+    end
+    
+    if d2(i) == 0
+        d2(i) = -1;
+    end
+    
+end
+
+disp('Converted Data:');
+
+disp('User 1:');
+disp(d1);
+
+disp('User 2:');
+disp(d2);
+
+% Encoding
+e1 = [];
+e2 = [];
+
+for i = 1:4
+    
+    temp1 = [];
+    temp2 = [];
+    
+    for j = 1:4
+        
+        temp1 = [temp1 d1(i) * c1(j)];
+        temp2 = [temp2 d2(i) * c2(j)];
+        
+    end
+    
+    e1 = [e1; temp1];
+    e2 = [e2; temp2];
+    
+end
+
+disp('Encoded Signals:');
+
+disp('User 1 Encoded:');
+disp(e1);
+
+disp('User 2 Encoded:');
+disp(e2);
+
+% Transmission
+transmitted = [];
+
+for i = 1:4
+    
+    temp = [];
+    
+    for j = 1:4
+        
+        temp = [temp e1(i,j) + e2(i,j)];
+        
+    end
+    
+    transmitted = [transmitted; temp];
+    
+end
+
+disp('Transmitted Signal:');
+disp(transmitted);
+
+% Decoding User 1
+decoded1 = [];
+
+for i = 1:4
+    
+    s = 0;
+    
+    for j = 1:4
+        
+        s = s + transmitted(i,j) * c1(j);
+        
+    end
+    
+    decoded1 = [decoded1 s];
+    
+end
+
+% Decoding User 2
+decoded2 = [];
+
+for i = 1:4
+    
+    s = 0;
+    
+    for j = 1:4
+        
+        s = s + transmitted(i,j) * c2(j);
+        
+    end
+    
+    decoded2 = [decoded2 s];
+    
+end
+
+disp('Decoded Values User 1:');
+disp(decoded1);
+
+disp('Decoded Values User 2:');
+disp(decoded2);
+
+% Final Output
+disp('Final Output');
+
+disp('User 1 Data:');
+
+for i = 1:4
+    
+    if decoded1(i) > 0
+        fprintf('1 ');
+    else
+        fprintf('0 ');
+    end
+    
+end
+
+fprintf('\n');
+
+disp('User 2 Data:');
+
+for i = 1:4
+    
+    if decoded2(i) > 0
+        fprintf('1 ');
+    else
+        fprintf('0 ');
+    end
+    
+end
+
+fprintf('\n');s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXP1 Python
+# EXPERIMENT 01 : CDMA FUNCTION CODE
+
+# Fixed input data
+d1 = [1, 0, 1, 1]
+d2 = [0, 1, 0, 1]
+
+# Fixed orthogonal codes
+c1 = [1, 1, 1, 1]
+c2 = [1, -1, 1, -1]
+
+print("User 1 Code:", c1)
+print("User 2 Code:", c2)
+
+# Convert data
+for i in range(4):
+    if d1[i] == 0:
+        d1[i] = -1
+
+    if d2[i] == 0:
+        d2[i] = -1
+
+print("\nConverted Data:")
+print("User 1:", d1)
+print("User 2:", d2)
+
+# Encoding
+e1 = []
+e2 = []
+
+for i in range(4):
+
+    temp1 = []
+    temp2 = []
+
+    for j in range(4):
+
+        temp1.append(d1[i] * c1[j])
+        temp2.append(d2[i] * c2[j])
+
+    e1.append(temp1)
+    e2.append(temp2)
+
+print("\nEncoded Signals:")
+print("User 1 Encoded:", e1)
+print("User 2 Encoded:", e2)
+
+# Transmission
+transmitted = []
+
+for i in range(4):
+
+    temp = []
+
+    for j in range(4):
+
+        temp.append(e1[i][j] + e2[i][j])
+
+    transmitted.append(temp)
+
+print("\nTransmitted Signal:")
+print(transmitted)
+
+# Decoding User 1
+decoded1 = []
+
+for i in range(4):
+
+    s = 0
+
+    for j in range(4):
+
+        s += transmitted[i][j] * c1[j]
+
+    decoded1.append(s)
+
+# Decoding User 2
+decoded2 = []
+
+for i in range(4):
+
+    s = 0
+
+    for j in range(4):
+
+        s += transmitted[i][j] * c2[j]
+
+    decoded2.append(s)
+
+print("\nDecoded Values User 1:", decoded1)
+print("Decoded Values User 2:", decoded2)
+
+print("\nFinal Output:")
+
+print("User 1 Data:")
+for i in decoded1:
+    if i > 0:
+        print(1, end=" ")
+    else:
+        print(0, end=" ")
+
+print("\nUser 2 Data:")
+for i in decoded2:
+    if i > 0:
+        print(1, end=" ")
+    else:
+        print(0, end=" ")
