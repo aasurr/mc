@@ -1,0 +1,85 @@
+clc;
+clear;
+close all;
+
+N = 100000;
+
+% Generate Rayleigh fading signal
+h = (randn(1,N) + 1i*randn(1,N))/sqrt(2);
+
+% Envelope
+r = abs(h);
+
+% Threshold values
+threshold = 0:0.1:2;
+
+% Initialize arrays
+LCR = zeros(size(threshold));
+ADF = zeros(size(threshold));
+OutageProb = zeros(size(threshold));
+
+for k = 1:length(threshold)
+
+    th = threshold(k);
+
+    % Samples below threshold
+    below = r < th;
+
+    % Outage Probability
+    OutageProb(k) = sum(below)/N;
+
+    % Number of crossings
+    crossings = sum(diff(below)==1);
+
+    % LCR Calculation
+    LCR(k) = crossings/N;
+
+    % ADF Calculation
+    if crossings ~= 0
+        ADF(k) = OutageProb(k)/LCR(k);
+    else
+        ADF(k) = 0;
+    end
+end
+
+% =========================
+% Outage Probability Plot
+% =========================
+figure;
+
+plot(threshold, OutageProb, 'LineWidth',2);
+
+xlabel('Threshold');
+ylabel('Outage Probability');
+
+title('Outage Probability vs Threshold');
+
+grid on;
+
+% =========================
+% LCR Plot
+% =========================
+figure;
+
+plot(threshold, LCR, 'LineWidth',2);
+
+xlabel('Threshold');
+ylabel('LCR');
+
+title('LCR vs Threshold');
+
+grid on;
+
+% =========================
+% ADF Plot
+% =========================
+figure;
+
+plot(threshold, ADF, 'LineWidth',2);
+
+xlabel('Threshold');
+ylabel('ADF');
+
+title('ADF vs Threshold');
+
+grid on;
